@@ -1,11 +1,11 @@
 ﻿  main.cpp
 D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(50,54): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
 D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(50,40): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(255,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(256,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(260,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(261,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(262,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(263,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(271,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(262,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(263,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(267,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(268,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(269,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(270,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(278,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
   OpenGLLight.vcxproj -> D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\x64\Debug\OpenGLLight.exe
