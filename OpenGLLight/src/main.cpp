@@ -15,6 +15,9 @@
 // Function Declaration
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void process_input(GLFWwindow* window);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 ImGuiIO& init_imgui(GLFWwindow* window);
 void update_gui_frame();
 void draw_imgui_window(const char* title, ImGuiIO& io);
@@ -25,6 +28,10 @@ float screen_Width = 800.0f;
 float screen_Height = 600.0f;
 
 Camera mainCamera(glm::vec3(0.0f, 0.0f, 3.0f));
+bool cameraMove = false;
+bool firstMouse = true;
+float lastX = screen_Width / 2.0f;
+float lastY = screen_Height / 2.0f;
 
 float currentTime = 0.0f;
 float deltaTime = 0.0f;
@@ -49,6 +56,9 @@ int main()
 
 	// Window Event Callback
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -56,6 +66,8 @@ int main()
 
 		return -1;
 	}
+
+	glEnable(GL_DEPTH_TEST);
 
 	Shader basicLight("./shader/vLight.shader", "./shader/fLight.shader");
 
@@ -134,7 +146,7 @@ int main()
 		process_input(window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		update_gui_frame();
 
@@ -179,6 +191,58 @@ void process_input(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	float cameraSpeed = 2.5f * deltaTime;
+	if (cameraMove)
+	{
+		// Mouse Setting
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			mainCamera.processKeyBoard(Camera_Movement::FORWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			mainCamera.processKeyBoard(Camera_Movement::BACKWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			mainCamera.processKeyBoard(Camera_Movement::LEFT, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			mainCamera.processKeyBoard(Camera_Movement::RIGHT, deltaTime);
+	}
+	else
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+
+	if (cameraMove)
+		mainCamera.processMouseMovement(xoffset, yoffset);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	mainCamera.processMouseScroll(yoffset);
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_RIGHT)
+	{
+		if (action == GLFW_PRESS)
+			cameraMove = true;
+		else if (action == GLFW_RELEASE)
+			cameraMove = false;
+	}
 }
 
 ImGuiIO& init_imgui(GLFWwindow* window)
