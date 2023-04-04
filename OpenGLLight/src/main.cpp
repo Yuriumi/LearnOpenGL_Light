@@ -37,6 +37,9 @@ float currentTime = 0.0f;
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
 
+// Light 
+glm::vec3 lightPosition(1.2f, 1.0f, 2.0f);
+
 int main()
 {
 	glfwInit();
@@ -69,6 +72,7 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
+	Shader basicNormal("./shader/vNormal.shader", "./shader/fNormal.shader");
 	Shader basicLight("./shader/vLight.shader", "./shader/fLight.shader");
 
 	float vertices[] = {
@@ -117,6 +121,7 @@ int main()
 
 	unsigned VAO, VBO;
 
+	// Normal Cube
 	glGenVertexArrays(1, &VAO);
 
 	glGenBuffers(1, &VBO);
@@ -125,6 +130,19 @@ int main()
 
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+
+	// Light Cube
+	unsigned int lightVAO;
+
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER,VBO);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -151,9 +169,9 @@ int main()
 		update_gui_frame();
 
 		// Renderer Order
-		basicLight.use();
+		basicNormal.use();
 
-		// Matrix Transform
+		// Normal Cube Matrix Transform
 		model = glm::mat4(1.0f);
 		view = glm::mat4(1.0f);
 		projection = glm::mat4(1.0f);
@@ -161,11 +179,30 @@ int main()
 		view = mainCamera.GetViewMatrix();
 		projection = glm::perspective(glm::radians(mainCamera.fov), screen_Width / screen_Height, 0.1f, 100.0f);
 
+		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		
+		// Light Cube Matrix Transform
+		basicLight.use();
+
+		model = glm::mat4(1.0f);
+		view = glm::mat4(1.0f);
+		projection = glm::mat4(1.0f);
+		model = glm::translate(model, lightPosition);
+		model = glm::scale(model, glm::vec3(0.2f));
+		view = mainCamera.GetViewMatrix();
+		projection = glm::perspective(glm::radians(mainCamera.fov), screen_Width / screen_Height, 0.1f, 100.0f);
+
 		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-		glBindVertexArray(VAO);
+		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 

@@ -88,6 +88,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\vNormal.shader" />
+    <None Include="shader\fNormal.shader" />
     <None Include="shader\vLight.shader" />
     <None Include="shader\fLight.shader" />
   </ItemGroup>
