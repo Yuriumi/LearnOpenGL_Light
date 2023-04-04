@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="C:\ProgrameLib_C++\src\glad.c" />
+    <ClCompile Include="ref\Camera.cpp" />
     <ClCompile Include="ref\imgui\imgui.cpp" />
     <ClCompile Include="ref\imgui\imgui_demo.cpp" />
     <ClCompile Include="ref\imgui\imgui_draw.cpp" />
@@ -140,9 +141,11 @@
     <ClCompile Include="ref\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="ref\imgui\imgui_tables.cpp" />
     <ClCompile Include="ref\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="ref\Shader.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ref\Camera.h" />
     <ClInclude Include="ref\imgui\imconfig.h" />
     <ClInclude Include="ref\imgui\imgui.h" />
     <ClInclude Include="ref\imgui\imgui_impl_glfw.h" />
@@ -153,6 +156,11 @@
     <ClInclude Include="ref\imgui\imstb_textedit.h" />
     <ClInclude Include="ref\imgui\imstb_truetype.h" />
     <ClInclude Include="ref\stb_image.h" />
+    <ClInclude Include="ref\Shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\fLight.shader" />
+    <None Include="shader\vLight.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

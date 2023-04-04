@@ -42,6 +42,12 @@
     <ClCompile Include="ref\imgui\imgui_widgets.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ref\Shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ref\Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ref\imgui\imconfig.h">
@@ -74,5 +80,15 @@
     <ClInclude Include="ref\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ref\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ref\Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\vLight.shader" />
+    <None Include="shader\fLight.shader" />
   </ItemGroup>
 </Project>
