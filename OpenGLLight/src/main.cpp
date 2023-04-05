@@ -43,7 +43,19 @@ float lastTime = 0.0f;
 
 // Light 
 glm::vec3 dirlightDirection(0.0f, 1.0f, 0.0f);
-glm::vec3 pointlightPosition(0.0f,1.0f,2.0f);
+glm::vec3 pointlightPosition(0.0f, 1.0f, 2.0f);
+
+// point light attribute
+bool enablePoint = false;
+glm::vec3 pLightAmbientColor(0.2f, 0.2f, 0.2f);
+glm::vec3 pLightDiffuseColor(0.2f, 0.2f, 0.2f);
+glm::vec3 pLightSpecularColor(0.2f, 0.2f, 0.2f);
+
+// direction light attribute
+bool enableDirection = true;
+glm::vec3 dLightAmbientColor(0.2f, 0.2f, 0.2f);
+glm::vec3 dLightDiffuseColor(0.2f, 0.2f, 0.2f);
+glm::vec3 dLightSpecularColor(0.2f, 0.2f, 0.2f);
 
 int main()
 {
@@ -236,19 +248,22 @@ int main()
 
 		glUniform3fv(glGetUniformLocation(basicNormal.ID, "viewPosition"), 1, glm::value_ptr(mainCamera.position));
 
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.ambient"), 1, glm::value_ptr(glm::vec3(0.2f, 0.2f, 0.2f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.specular"), 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
-		
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.ambient"), 1, glm::value_ptr(glm::vec3(0.2f, 0.2f, 0.2f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.specular"), 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.ambient"), 1, glm::value_ptr(dLightAmbientColor));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.diffuse"), 1, glm::value_ptr(dLightDiffuseColor));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.specular"), 1, glm::value_ptr(dLightSpecularColor));
+
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.ambient"), 1, glm::value_ptr(pLightAmbientColor));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.diffuse"), 1, glm::value_ptr(pLightDiffuseColor));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.specular"), 1, glm::value_ptr(pLightSpecularColor));
 		glUniform1f(glGetUniformLocation(basicNormal.ID, "pointLight.constant"), 1.0f);
 		glUniform1f(glGetUniformLocation(basicNormal.ID, "pointLight.linear"), 0.09f);
 		glUniform1f(glGetUniformLocation(basicNormal.ID, "pointLight.quadratic"), 0.032f);
 
 		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.position"), 1, glm::value_ptr(pointlightPosition));
 		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.direction"), 1, glm::value_ptr(dirlightDirection));
+
+		glUniform1i(glGetUniformLocation(basicNormal.ID, "enablePoint"), enablePoint);
+		glUniform1i(glGetUniformLocation(basicNormal.ID, "enableDirection"), enableDirection);
 
 		glBindVertexArray(VAO);
 
@@ -265,20 +280,23 @@ int main()
 		}
 		glBindVertexArray(0);
 
-		// Light Cube Matrix Transform
-		basicLight.use();
+		if (enablePoint)
+		{
+			// Light Cube Matrix Transform
+			basicLight.use();
 
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, pointlightPosition);
-		model = glm::scale(model, glm::vec3(0.2f));
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, pointlightPosition);
+			model = glm::scale(model, glm::vec3(0.2f));
 
-		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+			glBindVertexArray(lightVAO);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+			glBindVertexArray(0);
+		}
 
 		draw_imgui_window("OpenGL_Light_Settings", io);
 		render_gui();
@@ -382,6 +400,26 @@ void draw_imgui_window(const char* title, ImGuiIO& io)
 	ImGui::Begin(title);
 
 	// Draw window
+	ImGui::Checkbox("Show Point Light", &enablePoint);
+	if (ImGui::TreeNode("Point Light Settings"))
+	{
+		ImGui::DragFloat3("Point Light Position", glm::value_ptr(pointlightPosition), 0.1f, -10.0f, 10.0f);
+		ImGui::ColorEdit3("Point Light Ambient", glm::value_ptr(pLightAmbientColor));
+		ImGui::ColorEdit3("Point Light Diffuse", glm::value_ptr(pLightDiffuseColor));
+		ImGui::ColorEdit3("Point Light Specular", glm::value_ptr(pLightSpecularColor));
+
+		ImGui::TreePop();
+	}
+	ImGui::Checkbox("Show Direction Light", &enableDirection);
+	if (ImGui::TreeNode("Direction Light Settings"))
+	{
+		ImGui::DragFloat3("Direction Light", glm::value_ptr(dirlightDirection), 0.01f, -1.0f, 1.0f);
+		ImGui::ColorEdit3("Direction Light Ambient", glm::value_ptr(dLightAmbientColor));
+		ImGui::ColorEdit3("Direction Light Diffuse", glm::value_ptr(dLightDiffuseColor));
+		ImGui::ColorEdit3("Direction Light Specular", glm::value_ptr(dLightSpecularColor));
+
+		ImGui::TreePop();
+	}
 
 	ImGui::End();
 }

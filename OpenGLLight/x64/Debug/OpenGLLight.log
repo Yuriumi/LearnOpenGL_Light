@@ -1,11 +1,11 @@
 ﻿  main.cpp
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(55,54): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(55,40): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(329,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(330,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(334,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(335,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(336,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(337,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(345,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(67,54): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(67,40): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(347,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(348,11): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(352,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(353,16): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(354,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(355,10): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\OpenGLLight\src\main.cpp(363,32): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
   OpenGLLight.vcxproj -> D:\LearnOpenGL\LearnOpenGL_Light\OpenGLLight\x64\Debug\OpenGLLight.exe

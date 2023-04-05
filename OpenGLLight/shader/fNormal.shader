@@ -36,6 +36,8 @@ in vec2 TexCoords;
 out vec4 FragColor;
 
 uniform vec3 viewPosition;
+uniform bool enablePoint;
+uniform bool enableDirection;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light,vec3 normal,vec3 fragPos,vec3 viewDir);
@@ -48,8 +50,10 @@ void main()
 
 	// add Light
 	vec3 result;
-	result += CalcDirLight(dirLight,norm,viewDir);
-	result += CalcPointLight(pointLight,norm,FragPos,viewDir);
+	if(enableDirection)
+		result += CalcDirLight(dirLight,norm,viewDir);
+	if(enablePoint)
+		result += CalcPointLight(pointLight,norm,FragPos,viewDir);
 
 	FragColor = vec4(result,1.0f);
 }
