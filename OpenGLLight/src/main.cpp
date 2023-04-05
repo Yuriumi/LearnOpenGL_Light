@@ -42,7 +42,8 @@ float deltaTime = 0.0f;
 float lastTime = 0.0f;
 
 // Light 
-glm::vec3 lightPosition(1.2f, 1.0f, 2.0f);
+glm::vec3 lightDirection(0.0f, 1.0f, 0.0f);
+glm::vec3 pointLightPosition = lightDirection;
 
 int main()
 {
@@ -90,7 +91,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	load_texture("./Texture/container2.png");
-	
+
 	// Texture 2
 	unsigned int texture2;
 	glGenTextures(1, &texture2);
@@ -148,6 +149,19 @@ int main()
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	unsigned VAO, VBO;
 
 	// Normal Cube
@@ -157,15 +171,15 @@ int main()
 
 	glBindVertexArray(VAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER,VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	
+
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-	
+
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
@@ -177,7 +191,7 @@ int main()
 	glGenVertexArrays(1, &lightVAO);
 	glBindVertexArray(lightVAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER,VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -185,8 +199,8 @@ int main()
 	glBindVertexArray(0);
 
 	glm::mat4 model;
-	glm::mat4 view;
-	glm::mat4 projection;
+	glm::mat4 view(1.0f);
+	glm::mat4 projection(1.0f);
 
 	ImGuiIO& io = init_imgui(window);
 
@@ -205,6 +219,12 @@ int main()
 		// Renderer Order
 		basicNormal.use();
 
+		view = mainCamera.GetViewMatrix();
+		projection = glm::perspective(glm::radians(mainCamera.fov), screen_Width / screen_Height, 0.1f, 100.0f);
+
+		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
 		// Apply Texture
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
@@ -213,25 +233,24 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, texture2);
 		glUniform1i(glGetUniformLocation(basicNormal.ID, "material,specular"), 1);
 
-		// Normal Cube Matrix Transform
-		model = glm::mat4(1.0f);
-		view = glm::mat4(1.0f);
-		projection = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		view = mainCamera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(mainCamera.fov), screen_Width / screen_Height, 0.1f, 100.0f);
-
-		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
 		// Light Setting
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.position"), 1, glm::value_ptr(lightPosition));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.direction"), 1, glm::value_ptr(lightDirection));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.position"), 1, glm::value_ptr(pointLightPosition));
 		glUniform3fv(glGetUniformLocation(basicNormal.ID, "viewPosition"), 1, glm::value_ptr(mainCamera.position));
-		
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.ambient"), 1, glm::value_ptr(glm::vec3(0.2f,0.2f,0.2f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f,0.5f,0.5f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.specular"), 1, glm::value_ptr(glm::vec3(1.0f,1.0f,1.0f)));
+
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.ambient"), 1, glm::value_ptr(glm::vec3(0.2f, 0.2f, 0.2f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.specular"), 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+
+		glUniform1f(glGetUniformLocation(basicNormal.ID, "light.constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(basicNormal.ID, "light.linear"), 0.09f);
+		glUniform1f(glGetUniformLocation(basicNormal.ID, "light.quadratic"), 0.032f);
+
+		// Flash Light
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.flashPosition"), 1, glm::value_ptr(mainCamera.position));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.flashDirection"), 1, glm::value_ptr(mainCamera.front));
+		glUniform1f(glGetUniformLocation(basicNormal.ID,"light.cutOff"), glm::cos(glm::radians(12.5f)));
+		glUniform1f(glGetUniformLocation(basicNormal.ID,"light.outerCutOff"), glm::cos(glm::radians(17.5f)));
 
 		// Material Setting
 		glUniform3fv(glGetUniformLocation(basicNormal.ID, "material.diffuse"), 1, glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
@@ -239,24 +258,31 @@ int main()
 		glUniform1f(glGetUniformLocation(basicNormal.ID, "material.shininess"), 32.0f);
 
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+			// ¾ØÕóÓ¦ÓÃ
+			glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 		glBindVertexArray(0);
-		
+
 		// Light Cube Matrix Transform
 		basicLight.use();
 
 		model = glm::mat4(1.0f);
-		view = glm::mat4(1.0f);
-		projection = glm::mat4(1.0f);
-		model = glm::translate(model, lightPosition);
+		model = glm::translate(model, pointLightPosition);
 		model = glm::scale(model, glm::vec3(0.2f));
-		view = mainCamera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(mainCamera.fov), screen_Width / screen_Height, 0.1f, 100.0f);
 
 		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-		
+
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
@@ -274,7 +300,7 @@ int main()
 	return 0;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width,int height)
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
@@ -342,10 +368,10 @@ ImGuiIO& init_imgui(GLFWwindow* window)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	
+
 	ImGui::StyleColorsDark();
 
-	ImGui_ImplGlfw_InitForOpenGL(window,true);
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330 core");
 
 	return io;
