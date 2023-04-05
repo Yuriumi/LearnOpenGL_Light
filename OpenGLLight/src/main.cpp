@@ -42,8 +42,8 @@ float deltaTime = 0.0f;
 float lastTime = 0.0f;
 
 // Light 
-glm::vec3 lightDirection(0.0f, 1.0f, 0.0f);
-glm::vec3 pointLightPosition = lightDirection;
+glm::vec3 dirlightDirection(0.0f, 1.0f, 0.0f);
+glm::vec3 pointlightPosition(0.0f,1.0f,2.0f);
 
 int main()
 {
@@ -228,34 +228,27 @@ int main()
 		// Apply Texture
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
-		glUniform1i(glGetUniformLocation(basicNormal.ID, "material,diffuse"), 0);
+		glUniform1i(glGetUniformLocation(basicNormal.ID, "material.diffuse"), 0);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
-		glUniform1i(glGetUniformLocation(basicNormal.ID, "material,specular"), 1);
+		glUniform1i(glGetUniformLocation(basicNormal.ID, "material.specular"), 1);
+		glUniform1f(glGetUniformLocation(basicNormal.ID, "material.shininess"), 32.0f);
 
-		// Light Setting
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.direction"), 1, glm::value_ptr(lightDirection));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.position"), 1, glm::value_ptr(pointLightPosition));
 		glUniform3fv(glGetUniformLocation(basicNormal.ID, "viewPosition"), 1, glm::value_ptr(mainCamera.position));
 
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.ambient"), 1, glm::value_ptr(glm::vec3(0.2f, 0.2f, 0.2f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.specular"), 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.ambient"), 1, glm::value_ptr(glm::vec3(0.2f, 0.2f, 0.2f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.specular"), 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+		
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.ambient"), 1, glm::value_ptr(glm::vec3(0.2f, 0.2f, 0.2f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.specular"), 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+		glUniform1f(glGetUniformLocation(basicNormal.ID, "pointLight.constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(basicNormal.ID, "pointLight.linear"), 0.09f);
+		glUniform1f(glGetUniformLocation(basicNormal.ID, "pointLight.quadratic"), 0.032f);
 
-		glUniform1f(glGetUniformLocation(basicNormal.ID, "light.constant"), 1.0f);
-		glUniform1f(glGetUniformLocation(basicNormal.ID, "light.linear"), 0.09f);
-		glUniform1f(glGetUniformLocation(basicNormal.ID, "light.quadratic"), 0.032f);
-
-		// Flash Light
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.flashPosition"), 1, glm::value_ptr(mainCamera.position));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.flashDirection"), 1, glm::value_ptr(mainCamera.front));
-		glUniform1f(glGetUniformLocation(basicNormal.ID,"light.cutOff"), glm::cos(glm::radians(12.5f)));
-		glUniform1f(glGetUniformLocation(basicNormal.ID,"light.outerCutOff"), glm::cos(glm::radians(17.5f)));
-
-		// Material Setting
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "material.diffuse"), 1, glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "material.specular"), 1, glm::value_ptr(glm::vec3(0.5f)));
-		glUniform1f(glGetUniformLocation(basicNormal.ID, "material.shininess"), 32.0f);
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "pointLight.position"), 1, glm::value_ptr(pointlightPosition));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "dirLight.direction"), 1, glm::value_ptr(dirlightDirection));
 
 		glBindVertexArray(VAO);
 
@@ -276,7 +269,7 @@ int main()
 		basicLight.use();
 
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, pointLightPosition);
+		model = glm::translate(model, pointlightPosition);
 		model = glm::scale(model, glm::vec3(0.2f));
 
 		glUniformMatrix4fv(glGetUniformLocation(basicLight.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
