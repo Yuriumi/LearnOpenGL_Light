@@ -166,7 +166,6 @@ int main()
 
 		process_input(window);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		update_gui_frame();
@@ -187,8 +186,18 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(basicNormal.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 		// Light Setting
-		glUniform3fv(glGetUniformLocation(basicNormal.ID, "lightPosition"), 1, glm::value_ptr(lightPosition));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.position"), 1, glm::value_ptr(lightPosition));
 		glUniform3fv(glGetUniformLocation(basicNormal.ID, "viewPosition"), 1, glm::value_ptr(mainCamera.position));
+		
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.ambient"), 1, glm::value_ptr(glm::vec3(0.2f,0.2f,0.2f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f,0.5f,0.5f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "light.specular"), 1, glm::value_ptr(glm::vec3(1.0f,1.0f,1.0f)));
+
+		// Material Setting
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "material.ambient"), 1, glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "material.diffuse"), 1, glm::value_ptr(glm::vec3(1.0f, 0.5f, 0.31f)));
+		glUniform3fv(glGetUniformLocation(basicNormal.ID, "material.specular"), 1, glm::value_ptr(glm::vec3(0.5f)));
+		glUniform1f(glGetUniformLocation(basicNormal.ID, "material.shininess"), 32.0f);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
