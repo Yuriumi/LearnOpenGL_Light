@@ -164,6 +164,10 @@
     <None Include="shader\vLight.shader" />
     <None Include="shader\vNormal.shader" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Texture\container2.png" />
+    <Image Include="Texture\container2_specular.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -93,4 +93,12 @@
     <None Include="shader\vLight.shader" />
     <None Include="shader\fLight.shader" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Texture\container2.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Texture\container2_specular.png">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
